@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scope</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+
+<header class="navbar">
+    <h2 class="logo">Scope</h2>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../practice/practice.html">Practice</a>
+        <a href="resources.html" class="active">Resources</a>
+    </nav>
+</header>
+
+<main class="content">
+
+    <section class="card">
+        <h2>What Is Scope?</h2>
+        <p>
+            Scopedetermines where a variable can be accessed in a program.
+            It controls which parts of your code can see or modify a variable.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Local vs Global Scope</h2>
+        <pre class="code-block">
+x = 10  # global variable
+
+def example():
+    x = 5   # local variable
+    print(x)
+
+example()
+print(x)
+        </pre>
+        <p>
+            The variable inside the function is local, while the one
+            outside is global.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Here are mistakes you can avoid by keeping scope in mind</h2>
+        <ul>
+            <li>Assuming variables exist outside a function</li>
+            <li>Accidentally overwriting global variables</li>
+            <li>Using unclear variable names</li>
+        </ul>
+    </section>
+
+</main>
+
+</body>
+</html>

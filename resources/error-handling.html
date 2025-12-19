@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error Handling</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+
+<header class="navbar">
+    <h2 class="logo">Error Handling</h2>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../practice/practice.html">Practice</a>
+        <a href="resources.html" class="active">Resources</a>
+    </nav>
+</header>
+
+<main class="content">
+
+    <section class="card">
+        <h2>What Is Error Handling?</h2>
+        <p>
+            Error handling allows a program to respond
+            when something goes wrong instead of crashing.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Try/Except Example</h2>
+        <pre class="code-block">
+try:
+    number = int(input("Enter a number: "))
+    print(10 / number)
+except:
+    print("Something went wrong")
+        </pre>
+        <p>
+            This code prevents the program from crashing if invalid input
+            is provided to it.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Common errors that you can prevent using try/catch</h2>
+        <ul>
+            <li>Division by zero</li>
+            <li>Invalid input types</li>
+            <li>Missing variables</li>
+        </ul>
+    </section>
+</main>
+
+</body>
+</html>

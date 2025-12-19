@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging Practice</title>
+
+    <link rel="stylesheet" href="../../styles.css" />
+
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.js"></script>
+
+    <!-- Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+    <h2 class="logo">Debugging Practice</h2>
+    <nav class="nav-links">
+        <a href="../../index.html">Home</a>
+        <a href="../practice.html" class="active">Practice</a>
+        <a href="../../resources/resources.html">Resources</a>
+    </nav>
+</header>
+
+<main class="content">
+
+    <section class="card">
+        <h2>Debug 1</h2>
+        <p>
+            The code below has a syntax error.  
+            Fix it so it prints <code>Hello World</code>.
+        </p>
+        <textarea id="editor-1">
+print("Hello World"
+        </textarea>
+        <button onclick="runPython('editor-1', 'output-1')">Run Code</button>
+        <pre id="output-1"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Debug 2</h2>
+        <p>
+            The variable name is incorrect.  
+            Fix the code so it prints the value correctly.
+        </p>
+        <textarea id="editor-2">
+score = 10
+print(scroe)
+        </textarea>
+        <button onclick="runPython('editor-2', 'output-2')">Run Code</button>
+        <pre id="output-2"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Debug 3</h2>
+        <p>
+            The condition is wrong.  
+            Fix it so the message prints only when <code>age</code> is 18 or older.
+        </p>
+        <textarea id="editor-3">
+age = 16
+
+if age <= 18:
+    print("You can vote")
+        </textarea>
+        <button onclick="runPython('editor-3', 'output-3')">Run Code</button>
+        <pre id="output-3"></pre>
+    </section>
+
+</main>
+
+<script>
+let pyodide;
+let pyodideReady = false;
+const editors = {};
+
+async function loadPython() {
+    pyodide = await loadPyodide();
+    pyodideReady = true;
+}
+loadPython();
+
+document.querySelectorAll("textarea[id^='editor-']").forEach(textarea => {
+    editors[textarea.id] = CodeMirror.fromTextArea(textarea, {
+        mode: "python",
+        lineNumbers: true,
+        indentUnit: 4,
+        tabSize: 4,
+        matchBrackets: true,
+        autoCloseBrackets: true
+    });
+});
+
+async function runPython(editorId, outputId) {
+    const output = document.getElementById(outputId);
+    output.textContent = "Running...";
+
+    if (!pyodideReady) {
+        output.textContent = "Python is still loading...";
+        return;
+    }
+
+    try {
+        pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+        `);
+
+        pyodide.runPython(editors[editorId].getValue());
+
+        const result = pyodide.runPython("sys.stdout.getvalue()");
+        output.textContent = result || "Code ran successfully!";
+    } catch (err) {
+        output.textContent = err;
+    }
+}
+</script>
+
+</body>
+</html>

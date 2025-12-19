@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions Practice</title>
+
+    <link rel="stylesheet" href="../../styles.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+    <h2 class="logo">Functions Practice</h2>
+    <nav class="nav-links">
+        <a href="../../index.html">Home</a>
+        <a href="../practice.html" class="active">Practice</a>
+        <a href="../../resources/resources.html">Resources</a>
+    </nav>
+</header>
+
+<main class="content">
+
+    <section class="card">
+        <h2>Practice 1 (Simple Function)</h2>
+        <p>
+            Create a function named <code>greet</code> that prints
+            <code>"Hello!"</code> when it is called.
+        </p>
+        <textarea id="editor-1">
+# define your function here
+
+# call your function here
+        </textarea>
+        <button onclick="runPython('editor-1', 'output-1')">Run Code</button>
+        <pre id="output-1"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Practice 2</h2>
+        <p>
+            Create a function called <code>square</code> that takes a number
+            and returns its square.
+        </p>
+        <textarea id="editor-2">
+# define your function here
+
+# call the function and print the result
+        </textarea>
+        <button onclick="runPython('editor-2', 'output-2')">Run Code</button>
+        <pre id="output-2"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Project: Calculator Functions</h2>
+        <p>
+            Create functions for addition, subtraction, multiplication,
+            and division. Call each function and print the results.
+        </p>
+        <textarea id="editor-3">
+# define your calculator functions here
+
+# test your functions below
+        </textarea>
+        <button onclick="runPython('editor-3', 'output-3')">Run Code</button>
+        <pre id="output-3"></pre>
+    </section>
+
+</main>
+
+<script>
+let pyodide;
+let pyodideReady = false;
+const editors = {};
+
+async function loadPython() {
+    pyodide = await loadPyodide();
+    pyodideReady = true;
+}
+loadPython();
+
+document.querySelectorAll("textarea[id^='editor-']").forEach(textarea => {
+    editors[textarea.id] = CodeMirror.fromTextArea(textarea, {
+        mode: "python",
+        lineNumbers: true,
+        indentUnit: 4,
+        tabSize: 4,
+        matchBrackets: true,
+        autoCloseBrackets: true
+    });
+});
+
+async function runPython(editorId, outputId) {
+    const output = document.getElementById(outputId);
+    output.textContent = "Running...";
+
+    if (!pyodideReady) {
+        output.textContent = "Python is still loading...";
+        return;
+    }
+
+    try {
+        pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+        `);
+        pyodide.runPython(editors[editorId].getValue());
+        output.textContent = pyodide.runPython("sys.stdout.getvalue()") || "Code ran successfully!";
+    } catch (err) {
+        output.textContent = err;
+    }
+}
+</script>
+
+</body>
+</html>
